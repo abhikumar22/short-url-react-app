@@ -65,7 +65,7 @@ export default class Home extends Component {
 
         </div>
         {this.state.toShow &&
-        <div style={{alignSelf:'center',justifyContent:'center',width:'100%'}}>
+        <div  className="lander" >
          <p>{NETLIFY_URL+this.state.resultWebPage}</p>
           <button  style={{cursor: 'pointer'}} onClick={() => { this.goToThePage() }}>click to redirect</button>
          <button onClick={() => {navigator.clipboard.writeText(NETLIFY_URL+this.state.resultWebPage)}}>click here to copy</button>

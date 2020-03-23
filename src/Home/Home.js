@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from 'react-bootstrap';
 import "./Home.css";
-import {BASE_URL,GET_SHORT_URL} from "../utils/constants"
+import {BASE_URL,GET_SHORT_URL,NETLIFY_URL} from "../utils/constants"
 
 export default class Home extends Component {
   constructor(props) {
@@ -66,9 +66,9 @@ export default class Home extends Component {
         </div>
         {this.state.toShow &&
         <div style={{alignSelf:'center',justifyContent:'center',width:'100%'}}>
-         <p>{this.state.resultWebPage}</p>
+         <p>{NETLIFY_URL+this.state.resultWebPage}</p>
           <button  style={{cursor: 'pointer'}} onClick={() => { this.goToThePage() }}>click to redirect</button>
-         <button onClick={() => {navigator.clipboard.writeText("http://localhost:3000/"+this.state.resultWebPage)}}>click here to copy</button>
+         <button onClick={() => {navigator.clipboard.writeText(NETLIFY_URL+this.state.resultWebPage)}}>click here to copy</button>
          </div>
          }
      

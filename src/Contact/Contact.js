@@ -47,7 +47,7 @@ class Contact extends Component {
     render() {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', padding: 30 }}>
-                {this.state.badReq&&<div><h2>Contact Page</h2></div>}
+                {this.state.badReq&&<div><h2>Not found</h2></div>}
             </div>
         );
     }

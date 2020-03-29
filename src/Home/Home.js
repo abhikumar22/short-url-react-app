@@ -1,16 +1,23 @@
 import React, { Component } from "react";
 import { Button } from 'react-bootstrap';
 import "./Home.css";
-import {BASE_URL,GET_SHORT_URL,NETLIFY_URL} from "../utils/constants"
+import { BASE_URL, GET_SHORT_URL, NETLIFY_URL } from "../utils/constants"
+import Loader from 'react-loader-spinner'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: '', toShow: false, resultWebPage: '' };
+    this.state = { value: '', toShow: false, resultWebPage: '', toShowLoader: false };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  notify = () => toast("Copied to Clipboard");
 
   handleChange(event) {
     this.setState({ value: event.target.value });
@@ -22,7 +29,7 @@ export default class Home extends Component {
   }
 
   loginFun(event) {
-    fetch(BASE_URL+GET_SHORT_URL, {
+    fetch(BASE_URL + GET_SHORT_URL, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -35,7 +42,7 @@ export default class Home extends Component {
       .then(response => response.json())
       .then(res => {
         console.log(res)
-        this.setState({ toShow: true, resultWebPage: res.short_url })
+        this.setState({ toShow: true, toShowLoader: false, resultWebPage: res.short_url })
       })
       .catch(error => console.log('Authorization failed : ' + error.message));
   }
@@ -47,31 +54,38 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="Home">
+      <div className="Home" style={{ height: '100vh' }}>
         <div className="lander">
-          <h1>Short Url Service</h1>
-          <form>
-            {/* <Button variant="btn btn-success" onClick={() => history.push('/Products')}>Click button to view products</Button> */}
-            {/* <Button variant="btn btn-success" onClick={() => history.push('/AllUserScreen')}>Click to login</Button> */}
-          </form>
+          <h1 style={{ color: 'white', fontWeight: 'bold' }}>Short Url Service</h1>
 
           <form onSubmit={this.handleSubmit}>
             <label>
-          <input placeholder={'enter long url'} type="text" value={this.state.value} onChange={this.handleChange} />
+              <input placeholder={'enter long url'} type="text" value={this.state.value} onChange={this.handleChange} />
             </label>
             {/* <input type="submit" value="Submit" /> */}
-            <Button variant="btn btn-success" onClick={() => this.loginFun()}>Click to Generate Url</Button>
+            <Button style={{ marginLeft: 10 }} variant="btn btn-success" onClick={() => {
+              this.setState({ toShow: false, toShowLoader: true }, () => {
+                this.loginFun()
+              })
+            }}>Click to Generate Url</Button>
           </form>
 
         </div>
-        {this.state.toShow &&
-        <div  className="lander" >
-         <p>{NETLIFY_URL+this.state.resultWebPage}</p>
-          <button  style={{cursor: 'pointer'}} onClick={() => { this.goToThePage() }}>click to redirect</button>
-         <button onClick={() => {navigator.clipboard.writeText(NETLIFY_URL+this.state.resultWebPage)}}>click here to copy</button>
-         </div>
-         }
-     
+        {!this.state.toShow ?
+          <div className="lander" >
+            {this.state.toShowLoader && <Loader type="Ball-Triangle" color="yellow" height={80} width={80} />}
+          </div>
+          :
+          <div className="lander" >
+            <p style={{ fontWeight: 'bold' }}>Url : {this.state.value} -> {this.state.value.length} characters</p>
+            <p style={{ fontWeight: 'bold' }}>Tiny url : {NETLIFY_URL + this.state.resultWebPage} -> {this.state.resultWebPage.length + 29} characters</p>
+
+            <button style={{ cursor: 'pointer' }} onClick={() => { this.goToThePage() }}>click to redirect</button>
+            <button style={{ marginLeft: 10 }} onClick={this.notify}>copy to clipboard</button>
+            <ToastContainer autoClose={2000} />
+          </div>
+        }
+
       </div>
     );
   }

@@ -17,7 +17,10 @@ export default class Home extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  notify = () => toast("Copied to Clipboard");
+  notify = () =>{
+    navigator.clipboard.writeText(NETLIFY_URL+this.state.resultWebPage)
+    toast("Copied to Clipboard");
+  } 
 
   handleChange(event) {
     this.setState({ value: event.target.value });

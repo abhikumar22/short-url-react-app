@@ -61,7 +61,7 @@ export default class Home extends Component {
         <div className="lander">
           <h1 style={{ color: 'white', fontWeight: 'bold' }}>Short Url Service</h1>
 
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} style={{ marginTop:30}}>
             <label>
               <input placeholder={'enter long url'} type="text" value={this.state.value} onChange={this.handleChange} />
             </label>
